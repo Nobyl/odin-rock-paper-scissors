@@ -23,34 +23,23 @@ function playerPlay () {
 function round (playerSelection, computerSelection) {
     switch (playerSelection) {
         case "Rock":
-            if ("Rock" === computerSelection) {
-                return -1;
-            } else if ("Paper" === computerSelection) {
-                return 0;
-            } else if ("Scissors" === computerSelection) {
-                return 1;
-            }
-            break;
+            return compare (computerSelection, "Scissors", "Paper");
         case "Paper":
-            if ("Rock" === computerSelection) {
-                return 1;
-            } else if ("Paper" === computerSelection) {
-                return -1;
-            } else if ("Scissors" === computerSelection) {
-                return 0;
-            }
-            break;
+            return compare (computerSelection, "Rock", "Scissors");
         case "Scissors":
-            if ("Rock" === computerSelection) {
-                return 0;
-            } else if ("Paper" === computerSelection) {
-                return 1;
-            } else if ("Scissors" === computerSelection) {
-                return -1;
-            }
-            break;
+            return compare (computerSelection, "Paper", "Rock");
         default:
-           return -1;
+            return -1;
+    }
+}
+
+function compare (computerSelection, playerWinCondition, playerLoseCondition) {
+    if (computerSelection === playerWinCondition) {
+        return 1;
+    } else if (computerSelection === playerLoseCondition) {
+        return 0;
+    } else {
+        return -1;
     }
 }
 
