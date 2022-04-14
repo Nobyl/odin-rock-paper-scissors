@@ -1,3 +1,68 @@
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => button.addEventListener("click", () => {
+    playRound(button.textContent, computerPlay());
+}));
+
+let playerScore = 0;
+let computerScore = 0;
+
+function playRound (playerSelection, computerSelection) {
+    switch (playerSelection) {
+        case "Rock":
+            calcResults (playerSelection, computerSelection, "Scissors", "Paper");
+            break;
+        case "Paper":
+            calcResults (playerSelection, computerSelection, "Rock", "Scissors");
+            break;
+        case "Scissors":
+            calcResults (playerSelection, computerSelection, "Paper", "Rock");
+            break;
+    }
+}
+
+function calcResults (playerSelection, computerSelection, playerWinCondition, playerLoseCondition) {
+    const results = document.querySelector(".results");
+    const result = document.createElement("p");
+
+    switch (computerSelection) {
+        case playerWinCondition:
+            result.textContent = `You Win! ${playerSelection} beats ${computerSelection}.`;
+            playerScore += 1;
+            break;
+        case playerLoseCondition:
+            result.textContent = `You Lose! ${computerSelection} beats ${playerSelection}.`;
+            computerScore += 1;
+            break;
+        case playerSelection:
+            result.textContent = `Tie! ${playerSelection} versus ${computerSelection}.`;
+            break;
+    }
+
+    results.appendChild(result);
+    updateScore(playerScore, computerScore);
+}
+
+function updateScore (playerScore, computerScore) { 
+    const score = document.querySelector(".score");
+    score.textContent = `Player: ${playerScore} - Computer: ${computerScore}`;
+
+    if (playerScore === 5) {
+        endGame("Player");
+    } else if (computerScore === 5) {
+        endGame("Computer");
+    }       
+}
+
+function endGame (winner) {
+    const results = document.querySelector(".results");
+    const result = document.createElement("h3");
+
+    buttons.forEach(button => button.disabled = true);
+
+    result.textContent = `${winner} Wins!`;
+    results.appendChild(result);
+}
+
 function computerPlay () {
     let computerSelection = Math.floor(Math.random() * 3);
 
@@ -8,66 +73,5 @@ function computerPlay () {
             return "Paper";
         case 2:
             return "Scissors";
-    }
-}
-
-function playerPlay () {
-    let playerSelection = window.prompt("Enter your selection: ");
-
-    // Formats the playerSelection string. Makes the first character uppercase and all remaining characters lowercase.
-    playerSelection = playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1).toLowerCase();
-
-    return playerSelection;
-}
-
-function round (playerSelection, computerSelection) {
-    switch (playerSelection) {
-        case "Rock":
-            return compare (computerSelection, "Scissors", "Paper");
-        case "Paper":
-            return compare (computerSelection, "Rock", "Scissors");
-        case "Scissors":
-            return compare (computerSelection, "Paper", "Rock");
-        default:
-            return -1;
-    }
-}
-
-function compare (computerSelection, playerWinCondition, playerLoseCondition) {
-    if (computerSelection === playerWinCondition) {
-        return 1;
-    } else if (computerSelection === playerLoseCondition) {
-        return 0;
-    } else {
-        return -1;
-    }
-}
-
-function game() {
-    let playerWins = 0;
-    let computerWins = 0;
-
-    for (let i = 0; i < 5; i++) {
-        let playerSelection = playerPlay();
-        let computerSelection = computerPlay();
-
-        let result = round (playerSelection, computerSelection);
-
-        if (1 === result) {
-            console.log("You Win! " + playerSelection + " beats " + computerSelection + ".");
-            playerWins++;
-        } else if (0 === result) {
-            console.log("You Lose! " + computerSelection + " beats " + playerSelection + ".");
-            computerWins++;
-        } else {
-            console.log("Tie or Invalid Input. Replay Round.");
-            i--;
-        }
-    }
-
-    if (playerWins > computerWins) {
-        console.log("Player Wins! " + playerWins + " - " + computerWins + ".");
-    } else {
-        console.log("Computer Wins! " + computerWins + " - " + playerWins + ".");
     }
 }
